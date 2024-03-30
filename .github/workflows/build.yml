@@ -14,7 +14,7 @@ jobs:
 
     steps:
     # Checkout
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: true
         fetch-depth: 0
@@ -41,7 +41,7 @@ jobs:
 
     - name: Using the builtin GitHub Cache Action for .conan
       id: cache-conan
-      uses: actions/cache@v1
+      uses: actions/cache@v4
       env:
         cache-name: cache-conan-modules
       with:
@@ -49,8 +49,8 @@ jobs:
         key: ${{ runner.os }}-builder-${{ env.cache-name }}-${{ hashFiles('conanfile.py') }}
         restore-keys: ${{ runner.os }}-builder-${{ env.cache-name }}-
 
-    #- name: Conan install
-    # run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja --profile:host=./ci-conan-profile --profile:build=./ci-conan-profile
+    - name: Conan install
+      run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja --profile:host=./ci-conan-profile --profile:build=./ci-conan-profile
 
     - name: Run CMake 
       run: cmake --build --preset=ninja-msvc-release
