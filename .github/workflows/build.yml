@@ -52,11 +52,8 @@ jobs:
         key: ${{ runner.os }}-builder-${{ env.cache-name }}-${{ hashFiles('conanfile.py') }}
         restore-keys: ${{ runner.os }}-builder-${{ env.cache-name }}-
 
-    - name: Run CMake consuming CMakePresets.json
-      uses: lukka/run-cmake@v10
-      with:
-        configurePreset: ninja-release-win
-        buildPreset: ninja-msvc-release
+    - name: Run CMake 
+      run: cmake --build --preset ninja-msvc-release
 
     # Build the mod
     - uses: gruppe-adler/action-release-with-hemtt@v3

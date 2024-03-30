@@ -31,7 +31,7 @@
         "type": "equals",
         "lhs": "${hostSystemName}",
         "rhs": "Windows"
-      },
+      }
     },
     {
       "name": "ninja-release-win",
