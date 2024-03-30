@@ -28,19 +28,16 @@ jobs:
         toolset: 14
 
     # Install latest CMake
-    - uses: lukka/get-cmake@latest
+    - name: Install Conan
+      id: conan
+      uses: turtlebrowser/get-conan@main
 
-    - name: Create folder
-      run: |
-        mkdir ${{ env.VCPKG_DIR }}
+    - name: Conan version
+      run: echo "${{ steps.conan.outputs.version }}"
 
     # Setup vcpkg and build deps
-    - name: Restore artifacts, or Run vcpkg, build and cache artifacts
-      uses: lukka/run-vcpkg@v11
-      id: runvcpkg
-      with:
-        vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
-        vcpkgDirectory: ${{ env.VCPKG_DIR }}
+    - name: Conan install
+      run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja
 
     - name: Run CMake consuming CMakePresets.json and vcpkg.json by mean of vcpkg.
       uses: lukka/run-cmake@v10
