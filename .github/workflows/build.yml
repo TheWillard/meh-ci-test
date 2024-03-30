@@ -53,7 +53,7 @@ jobs:
     # run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja --profile:host=./ci-conan-profile --profile:build=./ci-conan-profile
 
     - name: Run CMake 
-      run: cmake --build --preset=ninja-msvc-release
+      run: cmake --build --preset=../ninja-msvc-release
 
     # Build the mod
     - uses: gruppe-adler/action-release-with-hemtt@v3
