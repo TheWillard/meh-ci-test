@@ -5,8 +5,6 @@ on:
   pull_request:
 
 env:
-  VCPKG_COMMIT: cc97b4536ae749ec0e4f643488b600b217540fb3
-  VCPKG_DIR: C:/deps/vcpkg
   CMAKE_PRESET: ninja-msvc-vcpkg
 
 jobs:
@@ -28,6 +26,9 @@ jobs:
         toolset: 14
 
     # Install latest CMake
+    - uses: lukka/get-cmake@latest
+        
+    # Install Conan
     - name: Install Conan
       id: conan
       uses: turtlebrowser/get-conan@main
@@ -35,9 +36,18 @@ jobs:
     - name: Conan version
       run: echo "${{ steps.conan.outputs.version }}"
 
-    # Setup vcpkg and build deps
     - name: Conan install
-      run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja
+      run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja --profile:build=./ci-conan-profile
+
+    - name: Using the builtin GitHub Cache Action for .conan
+      id: cache-conan
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-conan-modules
+      with:
+        path: ${{ env.CONAN_USER_HOME }}
+        key: ${{ runner.os }}-builder-${{ env.cache-name }}-${{ hashFiles('conanfile.py') }}
+        restore-keys: ${{ runner.os }}-builder-${{ env.cache-name }}-
 
     - name: Run CMake consuming CMakePresets.json and vcpkg.json by mean of vcpkg.
       uses: lukka/run-cmake@v10
