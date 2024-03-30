@@ -37,7 +37,7 @@ jobs:
       run: echo "${{ steps.conan.outputs.version }}"
 
     - name: Conan install
-      run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja -pr ./ci-conan-profile
+      run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja --profile:build=./ci-conan-profile
 
     - name: Using the builtin GitHub Cache Action for .conan
       id: cache-conan
