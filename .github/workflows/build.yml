@@ -48,10 +48,16 @@ jobs:
         path: ${{ env.CONAN_USER_HOME }}
         key: ${{ runner.os }}-builder-${{ env.cache-name }}-${{ hashFiles('conanfile.py') }}
         restore-keys: ${{ runner.os }}-builder-${{ env.cache-name }}-
-
+    
+    - name: bruh
+      run: ls
+          
     - name: Conan install
       run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja --profile:host=./ci-conan-profile --profile:build=./ci-conan-profile
 
+    - name: bruh
+      run: ls
+      
     - name: Run CMake 
       run: cmake --build --preset=ninja-msvc-release
 
