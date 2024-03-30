@@ -10,7 +10,7 @@
       "name": "ninja-debug-win",
       "displayName": "Ninja/Windows/Debug/Config",
       "description": "Ninja/Windows/Debug/Config",
-      //"binaryDir": "${sourceDir}/builds/${presetName}",
+      "binaryDir": "${sourceDir}/build/${presetName}",
       "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
