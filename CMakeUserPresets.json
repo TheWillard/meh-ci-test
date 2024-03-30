@@ -4,6 +4,7 @@
         "conan": {}
     },
     "include": [
-        "G:\\Repos\\grad_meh\\build\\CMakePresets.json"
+        "G:\\Repos\\grad_meh\\build\\CMakePresets.json",
+        "L:\\Repos\\ci-test\\grad_meh\\build\\CMakePresets.json"
     ]
 }

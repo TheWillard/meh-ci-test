@@ -5,7 +5,7 @@ on:
   pull_request:
 
 env:
-  CMAKE_PRESET: ninja-msvc-vcpkg
+  CONAN_USER_HOME: "${{ github.workspace }}/.conan2/"
 
 jobs:
   job_build_cpp:
@@ -27,6 +27,9 @@ jobs:
 
     # Install latest CMake
     - uses: lukka/get-cmake@latest
+    
+    - name: cmdtest
+      run: echo "${{ env.CONAN_USER_HOME }}"
         
     # Install Conan
     - name: Install Conan
@@ -49,11 +52,11 @@ jobs:
         key: ${{ runner.os }}-builder-${{ env.cache-name }}-${{ hashFiles('conanfile.py') }}
         restore-keys: ${{ runner.os }}-builder-${{ env.cache-name }}-
 
-    - name: Run CMake consuming CMakePresets.json and vcpkg.json by mean of vcpkg.
+    - name: Run CMake consuming CMakePresets.json
       uses: lukka/run-cmake@v10
       with:
-        configurePreset: ninja-release-vcpkg-win
-        buildPreset: ninja-msvc-vcpkg-release
+        configurePreset: ninja-release-win
+        buildPreset: ninja-msvc-release
 
     # Build the mod
     - uses: gruppe-adler/action-release-with-hemtt@v3
