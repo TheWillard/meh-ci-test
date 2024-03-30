@@ -31,13 +31,15 @@ jobs:
     - name: cmdtest
       run: echo "${{ env.CONAN_USER_HOME }}"
       
-    - name: cmdtest
-      run: ls $HOME/.conan2
+
         
     # Install Conan
     - name: Install Conan
       id: conan
       uses: turtlebrowser/get-conan@main
+      
+    - name: cmdtest
+      run: ls $HOME/.conan2
 
     - name: Conan version
       run: echo "${{ steps.conan.outputs.version }}"
