@@ -4,16 +4,12 @@ on:
   push:
   pull_request:
 
-env:
-  CONAN_USER_HOME: "${{ github.workspace }}/.conan2/"
-
 jobs:
   job_build_cpp:
     name: win
     runs-on: windows-latest
 
     steps:
-    # Checkout
     - uses: actions/checkout@v4
       with:
         submodules: true
@@ -25,26 +21,16 @@ jobs:
         vsversion: 2022
         toolset: 14
 
-    # Install latest CMake
     - uses: lukka/get-cmake@latest
-    
-    - name: cmdtest
-      run: echo "${{ env.CONAN_USER_HOME }}"
-      
 
-        
-    # Install Conan
     - name: Install Conan
       id: conan
       uses: turtlebrowser/get-conan@main
       
-    - name: cmdtest
-      run: ls ~\.conan2
-
-    - name: Conan version
+    - name: Print conan version
       run: echo "${{ steps.conan.outputs.version }}"
 
-    - name: Using the builtin GitHub Cache Action for .conan
+    - name: cache ~/.conan2
       id: cache-conan
       uses: actions/cache@v2
       env:
@@ -53,9 +39,6 @@ jobs:
         path: ~/.conan2/
         key: ${{ runner.os }}-builder-${{ env.cache-name }}-${{ hashFiles('conanfile.py') }}
         restore-keys: ${{ runner.os }}-builder-${{ env.cache-name }}-
-    
-    - name: bruh
-      run: ls
           
     - name: Conan install
       run: conan install . -s build_type=Release --output-folder=build --build=missing -c tools.cmake.cmaketoolchain:generator=Ninja --profile:host=./ci-conan-profile --profile:build=./ci-conan-profile
@@ -82,7 +65,7 @@ jobs:
     # zip it
     - uses: papeloto/action-zip@v1
       with:
-        files: \@${{ steps.build.outputs.mod_name }}/
+        files: ${{ steps.build.outputs.release_path }}
         dest: \@${{ steps.build.outputs.mod_name }}.zip
 
     # release it
